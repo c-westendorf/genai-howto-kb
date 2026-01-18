@@ -4,6 +4,10 @@ updated: 2026-01-17
 refs: [S0012, S0014]
 ---
 
+> **Navigation**: [START HERE](../../START_HERE.md) · [Concepts](../../concepts/index.md) · [Pitfalls](../../pitfalls/index.md) · [Decisions](../../decisions/index.md) · [Playbooks](../../playbooks/index.md) · [Reference](../index.md)
+>
+> **In this section**: [Explore](explore.md) · [Select](select.md) · [Refine](refine.md) · [Pushback](pushback.md) · [Verification](verification.md)
+
 # Pushback Prompts
 
 Use these to challenge genAI outputs, demand evidence, and make errors detectable.

@@ -3,6 +3,10 @@ title: Explore Prompts
 updated: 2026-01-17
 ---
 
+> **Navigation**: [START HERE](../../START_HERE.md) · [Concepts](../../concepts/index.md) · [Pitfalls](../../pitfalls/index.md) · [Decisions](../../decisions/index.md) · [Playbooks](../../playbooks/index.md) · [Reference](../index.md)
+>
+> **In this section**: [Explore](explore.md) · [Select](select.md) · [Refine](refine.md) · [Pushback](pushback.md) · [Verification](verification.md)
+
 # Explore Prompts
 
 Use these during the **explore phase** to diverge and generate options.

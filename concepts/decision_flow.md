@@ -4,6 +4,10 @@ updated: 2026-01-17
 refs: [S0007, S0008, S0012, S0023]
 ---
 
+> **Navigation**: [START HERE](../START_HERE.md) · [Concepts](index.md) · [Pitfalls](../pitfalls/index.md) · [Decisions](../decisions/index.md) · [Playbooks](../playbooks/index.md) · [Reference](../reference/index.md)
+>
+> **In this section**: [Context Engineering](context_engineering.md) · [Explore → Select → Refine](explore_select_refine.md) · [Trust Calibration](trust_calibration.md) · [Parallel Execution](parallel_execution.md) · [Decision Flow](decision_flow.md) · [One-Shot Planning](oneshot_planning.md)
+
 # The Decision Flow
 
 ## What it is

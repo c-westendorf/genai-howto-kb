@@ -3,6 +3,10 @@ title: Security Checklist
 updated: 2026-01-17
 ---
 
+> **Navigation**: [START HERE](../../START_HERE.md) · [Concepts](../../concepts/index.md) · [Pitfalls](../../pitfalls/index.md) · [Decisions](../../decisions/index.md) · [Playbooks](../../playbooks/index.md) · [Reference](../index.md)
+>
+> **In this section**: [Context Pack](context_pack.md) · [Verification](verification.md) · [Output Quality](output_quality.md) · [Security](security.md)
+
 # Security Checklist
 
 Security checks for genAI-generated code and content. Use before deploying or sharing.

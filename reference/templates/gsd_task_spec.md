@@ -3,6 +3,10 @@ title: GSD Task Spec Template
 updated: 2026-01-17
 ---
 
+> **Navigation**: [START HERE](../../START_HERE.md) · [Concepts](../../concepts/index.md) · [Pitfalls](../../pitfalls/index.md) · [Decisions](../../decisions/index.md) · [Playbooks](../../playbooks/index.md) · [Reference](../index.md)
+>
+> **In this section**: [Context Pack](context_pack.md) · [Options Table](options_table.md) · [Evidence Table](evidence_table.md) · [GSD Task Spec](gsd_task_spec.md) · [RALPH State Files](ralph_state_files.md)
+
 # GSD Task Spec Template
 
 A template for writing genAI-friendly task specifications. Use `...` as expansion markers to tell the AI where to elaborate.

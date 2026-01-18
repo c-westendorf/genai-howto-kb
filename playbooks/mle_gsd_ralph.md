@@ -1,21 +1,30 @@
 ---
 title: GSD+RALPH Method
-updated: 2026-01-17
+updated: 2026-01-18
 source_attribution: "RALPH method by Geoffrey Huntley, July 2025"
 ---
 
+> **Navigation**: [START HERE](../START_HERE.md) · [Concepts](../concepts/index.md) · [Pitfalls](../pitfalls/index.md) · [Decisions](../decisions/index.md) · [Playbooks](index.md) · [Reference](../reference/index.md)
+>
+> **In this section**: [Writing](writing.md) · [Analysis](analysis.md) · [Research](research.md) · [Code](code.md) · [Meetings](meetings.md) · [DS Patterns](ds_patterns.md) · [MLE Patterns](mle_patterns.md) · [GSD+RALPH](mle_gsd_ralph.md) · [Business](business_patterns.md)
+
 # GSD+RALPH Method
 
-A combined methodology for AI-assisted development: **GSD** structures tasks as genAI-friendly specs, **RALPH** executes them without context pollution.
+A combined methodology for AI-assisted development:
+
+- **GSD** structures work as a genAI-friendly *spec* (requirements + verifiable success criteria).
+- **RALPH** executes the spec via **fresh-context iterations**, persisting state on disk.
+
+> Terminology note: “GSD” is used here as shorthand for a spec-first workflow (Explore → Plan → Code → Commit). It is *not* referring to any specific third-party “GSD” package/tooling.
 
 ---
 
 ## When to use this
 
 - Complex implementations that span multiple sessions
-- Tasks where you've noticed AI output degrading over time
+- Tasks where you've noticed model output degrading over time
 - Projects where you want progress to persist but failures to be forgotten
-- Long-running work with Claude Code or similar AI coding assistants
+- Long-running work with AI coding assistants (Claude Code, Cursor, Windsurf, etc.)
 
 ---
 
@@ -25,16 +34,16 @@ A combined methodology for AI-assisted development: **GSD** structures tasks as 
 
 | Layer | What it does | Key artifact |
 |-------|-------------|--------------|
-| **GSD** (Planning) | Structures tasks as genAI-friendly specs | `ralph_task.md` — the task spec |
-| **RALPH** (Execution) | Runs context-clean loops, externalizes state | The bash loop + state files |
+| **GSD** (Planning) | Produces a precise, expandable spec | `ralph_task.md` — requirements + success criteria |
+| **RALPH** (Execution) | Runs context-clean loops, externalizes state | The restart loop + on-disk plan/ops files |
 
-The `ralph_task.md` file IS the GSD-style spec — this is where the two methods connect.
+The spec is the interface between the two.
 
 ---
 
 # Part 1: GSD — Task Planning
 
-## The GSD workflow
+## The workflow
 
 ```
 ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐
@@ -61,7 +70,7 @@ Before we start:
 
 ### Plan phase
 
-Write the genAI-friendly spec (this becomes `ralph_task.md`):
+Write the genAI-friendly spec (save as `ralph_task.md`):
 
 ```text
 Based on our exploration, write a task spec with:
@@ -104,13 +113,12 @@ Before committing:
 
 ### The "..." expansion marker
 
-This is the key to genAI-friendly specs. The `...` tells the AI: "You expand this."
+The `...` tells the model: “Expand this into implementation details.”
 
 **Without expansion markers:**
 ```text
 Create a user authentication system.
 ```
-→ AI makes many assumptions, output may not match intent
 
 **With expansion markers:**
 ```text
@@ -120,7 +128,6 @@ Create user authentication:
 - Password hashing with bcrypt ...
 - Session management ...
 ```
-→ AI knows exactly what to implement, expands each point
 
 ### Task spec structure
 
@@ -156,9 +163,18 @@ test_command: "[how to verify]"
 
 ---
 
-## Context via CLAUDE.md
+## Project context files
 
-Provide project-level context in a `CLAUDE.md` file:
+Provide project-level context via a persistent context file that your code agent loads. Common patterns:
+
+- `CONTEXT.md` or `PROJECT.md` (repo root)
+- `.claude/CLAUDE.md` (Claude Code)
+- `.cursor/rules.mdc` (Cursor)
+- Custom paths configured in your agent
+
+Most code agents walk **up parent directories** from the working directory, loading context files they find along the way.
+
+Example:
 
 ```markdown
 # Project: [Name]
@@ -184,88 +200,104 @@ Provide project-level context in a `CLAUDE.md` file:
 - [Anti-pattern 2]
 ```
 
-Place at:
-- Repository root for project-wide context
-- Subdirectories for area-specific context
-
 ---
 
 # Part 2: RALPH — Execution Loop
 
 ## The core concept
 
-**RALPH is an agent that forgets on purpose.**
+**RALPH is the restart loop: an agent that forgets on purpose.**
 
-Traditional approach: Keep context, hope it stays clean
-→ Context accumulates errors, output degrades
+Traditional approach: keep context, hope it stays clean
+→ context accumulates dead ends, output degrades
 
-RALPH approach: Reset context each iteration, persist progress in files
-→ Each iteration starts fresh, progress survives
+RALPH approach: reset context each iteration, persist progress in files
+→ each iteration starts fresh, progress survives
 
-## The bash loop
+---
+
+## The loop
+
+Preferred (official CLI name + print mode):
 
 ```bash
-while :; do cat PROMPT.md | claude-code ; done
+while :; do claude -p "$(cat PROMPT.md)"; done
 ```
 
+Notes:
+- Some writeups show `claude-code` in the loop; treat that as an alias/older naming. The portable form is `claude`.
+- The loop is intentionally brutal: one run, exit, restart.
+
 This loop:
-1. Reads current task from `PROMPT.md`
-2. Runs Claude Code with that context
-3. When Claude Code exits (complete or failed), starts fresh
-4. Progress lives in files, not in context
+1. Reads deterministic instructions from `PROMPT.md`
+2. Runs a fresh instance
+3. When it exits (complete or failed), starts over
+4. Progress lives in files, not in chat context
 
 ---
 
 ## The context pollution problem
 
-### What happens without RALPH
+### What happens without resets
 
-As AI agents work on long tasks, context fills with:
-- Error messages from failed attempts
-- Abandoned approaches
-- Debugging output
-- Half-baked explorations
+As agents work on long tasks, context fills with:
+- error messages from failed attempts
+- abandoned approaches
+- debug output
+- half-explored ideas
 
-**Symptoms of context pollution:**
-- Repeating itself
-- "Fixing" the same bug differently each time
-- Undoing its own previous fixes
-- Circular reasoning
+Symptoms:
+- repeating itself
+- “fixing” the same bug differently each time
+- undoing previous fixes
+- circular reasoning
 
-**The trap:** Adding more instructions doesn't help. More tokens don't help. Once context is polluted, quality only degrades.
+### RALPH’s solution
 
-### RALPH's solution
-
-Don't clean the context — throw it away and start fresh.
+Don’t clean the context — throw it away and re-read reality from disk.
 
 ```
-Context (polluted)     →  Dies with each iteration
-Files (clean)          →  Persist forever
-Git (authoritative)    →  Can't hallucinate
+Context (polluted)     → dies with each iteration
+Files (curated)        → persist across iterations
+Git/tests (reality)    → provide backpressure
 ```
-
-Each fresh agent reads reality from files, not from polluted memory.
 
 ---
 
 ## State files
 
-### Directory structure
+### Preferred artifact split
+
+Keep **three** durable artifacts with clear roles:
+
+1. **Spec (source of truth)** — rarely edited
+2. **Implementation plan (living checklist)** — disposable/regenerable
+3. **Ops/agent rules (how to run, guardrails)** — brief, stable
+
+Recommended layout:
+
+```
+project/
+├── ralph_task.md      # requirements/spec (source of truth)
+├── progress.md        # what's done / what's next (living, disposable)
+├── guardrails.md      # rules to follow (brief, stable)
+└── PROMPT.md          # deterministic loop instructions
+```
+
+If you prefer a dedicated folder, use `.ralph/`:
 
 ```
 project/
 ├── .ralph/
-│   ├── ralph_task.md      # The GSD spec (source of truth)
-│   ├── progress.md        # What's done / what's next
-│   ├── guardrails.md      # Rules to follow
-│   ├── errors.log         # What blew up
-│   └── activity.log       # Audit trail
-└── PROMPT.md              # What each iteration reads
+│   ├── ralph_task.md
+│   ├── progress.md
+│   └── guardrails.md
+└── PROMPT.md
 ```
 
-### ralph_task.md (Anchor file)
+### Spec (anchor)
 
-This IS the GSD-style spec. Source of truth for the task:
+This is the GSD-style spec: requirements + success criteria.
 
 ```markdown
 ---
@@ -286,43 +318,43 @@ test_command: "npm test"
 
 ### progress.md
 
-Track completed work:
+Tracks what's been completed and what's next. Updated after each iteration. Can be regenerated from the spec if needed.
 
 ```markdown
 # Progress
 
-## Completed
-- [x] Set up project structure - 2026-01-17 10:30
-- [x] Implement /health endpoint - 2026-01-17 10:45
-
-## Current
+## Now
 - [ ] Implement POST /users
 
-## Blocked
-(none)
+## Done
+- [x] Set up project structure (2026-01-17)
+- [x] Implement /health endpoint (2026-01-17)
+
+## Notes / discoveries
+- ...
 ```
 
 ### guardrails.md
 
-Rules every iteration must follow:
+Rules every iteration must follow. Keep it short and operational.
 
 ```markdown
 # Guardrails
 
+## How to validate
+- Run: npm test
+
 ## Always
-- Run tests before marking anything complete
-- Update progress.md after each change
 - Follow existing code patterns in /src
+- Update progress.md after each piece of work
 
 ## Never
 - Modify files outside /src
 - Push to main branch directly
-- Delete without backup
 
 ## When stuck
-- Log to errors.log
-- Exit cleanly
-- Let next iteration try fresh
+- Write a concise failure note into progress.md ("Notes / discoveries")
+- Exit cleanly so the next iteration starts fresh
 ```
 
 ### PROMPT.md
@@ -330,38 +362,45 @@ Rules every iteration must follow:
 What the loop feeds to each iteration:
 
 ```markdown
-Read .ralph/ralph_task.md for the task.
-Read .ralph/progress.md for current status.
-Read .ralph/guardrails.md for rules.
+Read ralph_task.md for requirements and success criteria.
+Read progress.md for what to work on next.
+Read guardrails.md for validation commands and rules.
 
-Do the next piece of work.
-Update .ralph/progress.md when done.
-Exit when complete or blocked.
+Do the single highest-priority unfinished item from progress.md.
+Run validation.
+Update progress.md (mark done, add brief notes).
+Commit only if tests pass.
+Exit.
 ```
 
 ---
 
-## State hygiene
+## State hygiene (what makes the loop productive)
 
-**The core technique of RALPH is state hygiene, not the loop.**
+**The loop is the mechanism. State hygiene is what keeps it effective.**
 
-### Principles
+Principles:
 
-1. **Externalize all progress** — Nothing important lives only in context
-2. **Clean failure** — Errors get logged, then forgotten
-3. **Atomic updates** — Files reflect completed work, not work-in-progress
-4. **Single source of truth** — `ralph_task.md` is authoritative
-5. **Human override** — Edit files between iterations as needed
+1. **Externalize all progress** — nothing important lives only in chat context
+2. **Clean failure** — failures become short notes in the plan, then the run ends
+3. **Atomic updates** — update plan/spec only when work is complete or a decision is finalized
+4. **Single source of truth** — requirements live in the spec; the plan is a derived checklist
+5. **Keep always-loaded context brief** — avoid auto-loading long logs; summarize into the plan
 
-### Hygiene checklist
+Iteration checklist:
 
-Each iteration should:
-- [ ] Read current state from files
-- [ ] Do ONE focused piece of work
-- [ ] Update progress.md with completion
-- [ ] Log any errors to errors.log
-- [ ] Update ralph_task.md if scope changes
-- [ ] Exit cleanly
+- [ ] Read spec/plan/agents
+- [ ] Do one focused unit of work
+- [ ] Run validation
+- [ ] Update plan (done + brief notes)
+- [ ] Commit only if green
+- [ ] Exit
+
+---
+
+## Permissions/autonomy note
+
+If you want truly unattended loops, you need a permissions strategy. Typical practice is to run in a sandboxed environment and enable skip-permissions mode as appropriate for that sandbox.
 
 ---
 
@@ -377,23 +416,23 @@ Each iteration should:
    └─→ Write ralph_task.md with success criteria + expansion markers
 
 3. SET UP (RALPH)
-   └─→ Create .ralph/ directory with state files
+   └─→ Create progress.md and guardrails.md
    └─→ Write PROMPT.md
-   └─→ Write guardrails.md
 
-4. EXECUTE (RALPH loop)
-   └─→ while :; do cat PROMPT.md | claude-code ; done
-   └─→ Each iteration: read state → do work → update progress → exit
+4. EXECUTE (restart loop)
+   └─→ while :; do claude -p "$(cat PROMPT.md)"; done
+   └─→ Each iteration: read state → do work → validate → update plan → exit
 
-5. VERIFY
-   └─→ Run test_command
-   └─→ Check all success criteria
+5. VERIFY + SHIP
+   └─→ Ensure all success criteria are checked
    └─→ Commit when green
 ```
 
+---
+
 ## Example: From idea to shipped code
 
-**Idea:** "Add user authentication to the API"
+**Idea:** “Add user authentication to the API”
 
 **Step 1: Write ralph_task.md (GSD spec)**
 
@@ -439,17 +478,15 @@ Adding auth to existing Express API in /src/api
 - Don't modify existing endpoints
 ```
 
-**Step 2: Set up RALPH state files**
+**Step 2: Create progress.md**
 
-Create `.ralph/` with progress.md, guardrails.md, errors.log, activity.log
+- Order the work to minimize risk and maximize test feedback.
 
 **Step 3: Run the loop**
 
 ```bash
-while :; do cat PROMPT.md | claude-code ; done
+while :; do claude -p "$(cat PROMPT.md)"; done
 ```
-
-Watch progress.md update as work completes. If iteration fails, next one starts fresh.
 
 **Step 4: Verify and commit**
 
@@ -461,21 +498,18 @@ When all criteria checked, run `npm test`, then commit.
 
 | Pitfall | Signs | Fix |
 |---------|-------|-----|
-| Vague spec | AI asks many questions | Add expansion markers, be specific |
-| No test command | "It works" but untested | Always include verification command |
-| Progress in context only | Lost on reset | Write to progress.md immediately |
-| Continuing after errors | Same error repeats | Exit and restart fresh |
-| Stale ralph_task.md | Working on wrong thing | Update task file as scope evolves |
-| Missing guardrails | Unwanted changes | Add explicit rules |
-| No activity logging | Can't debug stuck loops | Always log to activity.log |
+| Vague spec | AI asks many questions | Add expansion markers; make success criteria testable |
+| No test command | “It works” but untested | Always include an explicit validation command |
+| Treating the plan as truth | Plan drifts from requirements | Keep requirements in spec; regenerate plan if needed |
+| Progress lives only in chat | Lost on reset | Update progress.md immediately |
+| Always-loaded context bloats | Output degrades again | Keep guardrails.md brief; summarize logs into progress.md |
+| Continuing after repeated errors | Same error repeats | End run; restart fresh; change plan/spec only with a decision |
 
 ---
 
 ## Related
 
-- [One-Shot Planning](../concepts/oneshot_planning.md) — the underlying mental model
+- [One-Shot Planning](../concepts/oneshot_planning.md) — specification model for minimal iteration
 - [MLE-Specific Patterns](mle_patterns.md) — additional MLE patterns
 - [Code Playbook](code.md) — general code patterns
 - [GSD Task Spec Template](../reference/templates/gsd_task_spec.md) — fill-in-the-blank spec
-- [RALPH State Files Template](../reference/templates/ralph_state_files.md) — state file templates
-- [Context Engineering](../concepts/context_engineering.md) — context packaging fundamentals

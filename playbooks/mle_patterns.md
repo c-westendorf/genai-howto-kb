@@ -3,6 +3,10 @@ title: MLE-Specific Patterns
 updated: 2026-01-17
 ---
 
+> **Navigation**: [START HERE](../START_HERE.md) · [Concepts](../concepts/index.md) · [Pitfalls](../pitfalls/index.md) · [Decisions](../decisions/index.md) · [Playbooks](index.md) · [Reference](../reference/index.md)
+>
+> **In this section**: [Writing](writing.md) · [Analysis](analysis.md) · [Research](research.md) · [Code](code.md) · [Meetings](meetings.md) · [DS Patterns](ds_patterns.md) · [MLE Patterns](mle_patterns.md) · [GSD+RALPH](mle_gsd_ralph.md) · [Business](business_patterns.md)
+
 # MLE-Specific Patterns
 
 Patterns for ML engineering work: spec-first development, test generation, security review, system design.

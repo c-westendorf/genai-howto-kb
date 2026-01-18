@@ -3,6 +3,10 @@ title: Refine Prompts
 updated: 2026-01-17
 ---
 
+> **Navigation**: [START HERE](../../START_HERE.md) · [Concepts](../../concepts/index.md) · [Pitfalls](../../pitfalls/index.md) · [Decisions](../../decisions/index.md) · [Playbooks](../../playbooks/index.md) · [Reference](../index.md)
+>
+> **In this section**: [Explore](explore.md) · [Select](select.md) · [Refine](refine.md) · [Pushback](pushback.md) · [Verification](verification.md)
+
 # Refine Prompts
 
 Use these during the **refine phase** to iterate toward quality.

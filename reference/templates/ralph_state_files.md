@@ -3,6 +3,10 @@ title: RALPH State Files Template
 updated: 2026-01-17
 ---
 
+> **Navigation**: [START HERE](../../START_HERE.md) · [Concepts](../../concepts/index.md) · [Pitfalls](../../pitfalls/index.md) · [Decisions](../../decisions/index.md) · [Playbooks](../../playbooks/index.md) · [Reference](../index.md)
+>
+> **In this section**: [Context Pack](context_pack.md) · [Options Table](options_table.md) · [Evidence Table](evidence_table.md) · [GSD Task Spec](gsd_task_spec.md) · [RALPH State Files](ralph_state_files.md)
+
 # RALPH State Files Template
 
 Templates for the state files used in RALPH execution. These files externalize state so the AI agent can forget context but remember progress.
@@ -252,7 +256,7 @@ Audit trail of what each iteration did. Useful for debugging stuck loops.
 
 ## PROMPT.md
 
-What the bash loop feeds to each Claude Code iteration.
+What the bash loop feeds to each code agent iteration.
 
 ```markdown
 # RALPH Iteration
