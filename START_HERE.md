@@ -1,9 +1,9 @@
 ---
 title: GenAI Usage Guide
-updated: 2026-01-17
+updated: 2026-01-18
 ---
 
-> **Navigation**: [Concepts](concepts/index.md) · [Pitfalls](pitfalls/index.md) · [Decisions](decisions/index.md) · [Playbooks](playbooks/index.md) · [Reference](reference/index.md) · [Evolution](evolution.md)
+> **Navigation**: START HERE · [Concepts](concepts/index.md) · [Pitfalls](pitfalls/index.md) · [Decisions](decisions/index.md) · [Playbooks](playbooks/index.md) · [Reference](reference/index.md) · [Evolution](evolution.md)
 
 # GenAI Usage Guide
 
@@ -55,11 +55,18 @@ GenAI is a **thought partner**, not a vending machine. The shift:
 - [Trust Calibration](concepts/trust_calibration.md) — match verification to stakes
 - [Parallel Execution](concepts/parallel_execution.md) — scale thinking with multiple threads
 - [Decision Flow](concepts/decision_flow.md) — the meta-question: what pattern fits?
+- [One-Shot Planning](concepts/oneshot_planning.md) — structure specs for single-pass AI implementation
 
 ### When things go wrong
 - [Context Bloat](pitfalls/context_bloat.md) — outputs getting worse as you add more
 - [Hallucinations](pitfalls/hallucinations.md) — confident but fabricated
 - [Getting Stuck](pitfalls/getting_stuck.md) — escape prompts and reframing
+
+### Role-Specific Playbooks
+- [GSD+RALPH Method](playbooks/mle_gsd_ralph.md) — deterministic AI-assisted development workflow
+- [Data Scientist Patterns](playbooks/ds_patterns.md) — analysis-focused iteration
+- [MLE Patterns](playbooks/mle_patterns.md) — code-heavy development
+- [Business User Patterns](playbooks/business_patterns.md) — non-technical AI collaboration
 
 ### Quick reference
 - [Explore prompts](reference/prompts/explore.md)

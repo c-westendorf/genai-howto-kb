@@ -2,7 +2,7 @@
 title: GenAI Usage Guide
 version: 1.0.0
 created: 2026-01-17
-updated: 2026-01-17
+updated: 2026-01-18
 ---
 
 # GenAI Usage Guide
@@ -17,10 +17,10 @@ A practical guide for working effectively with generative AI. This is a cognitiv
 
 | Section | Purpose |
 |---------|---------|
-| [**Concepts**](concepts/index.md) | Core mental models (context engineering, explore/select/refine, trust calibration) |
+| [**Concepts**](concepts/index.md) | Core mental models (context engineering, explore/select/refine, trust calibration, one-shot planning) |
 | [**Pitfalls**](pitfalls/index.md) | Common problems and fixes (context bloat, hallucinations, getting stuck) |
 | [**Decisions**](decisions/index.md) | Decision support ("what pattern?", "how much verification?", "start over?") |
-| [**Playbooks**](playbooks/index.md) | Task-specific guides (writing, analysis, code, meetings) + role-specific patterns |
+| [**Playbooks**](playbooks/index.md) | Task-specific guides (writing, analysis, code, meetings) + role-specific patterns (GSD+RALPH, DS, MLE, Business) |
 | [**Reference**](reference/index.md) | Copy-paste prompts, checklists, templates |
 | [**Evolution**](evolution.md) | Capability progression map (L1 → L4) |
 

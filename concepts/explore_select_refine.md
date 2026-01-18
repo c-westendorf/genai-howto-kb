@@ -1,6 +1,6 @@
 ---
 title: Explore → Select → Refine
-updated: 2026-01-17
+updated: 2026-01-18
 refs: [S0017, S0007, S0008]
 ---
 
@@ -20,6 +20,90 @@ The thought partnership loop. Instead of accepting the first answer, you:
 
 This is how you treat genAI as a collaborator, not a vending machine.
 
+## Quickstart
+
+**Use ESR when:**
+- You need to turn a vague topic into a clear question, plan, or decision
+- You want genAI as a thought partner (options → decision → quality bar)
+- You're unsure what the right next move is
+
+**Before you start, gather:**
+- Topic/task: what you're trying to accomplish
+- Audience/decision owner: who this is for
+- Constraints: must-haves, must-avoids
+- Stakes: low / medium / high
+
+**Expected outputs:**
+- 3-5 distinct directions (Explore)
+- 1 selected direction + decision criteria (Select)
+- Refined spec + verification checklist + next action (Refine)
+
+**Runnable prompt:**
+```text
+You are my thought partner. We will run Explore → Select → Refine.
+
+Context:
+- Topic/task: <what you're trying to accomplish>
+- Audience/decision owner: <who this is for>
+- Constraints: <must-haves, must-avoids>
+- Stakes: <low/medium/high>
+
+1) EXPLORE: Generate 3-5 meaningfully different directions.
+   For each: what it is, assumptions, risks/unknowns.
+   Ask clarifying questions if constraints are missing.
+
+2) SELECT: Ask me for decision criteria if not provided.
+   Compare directions against criteria.
+   Recommend one and explain why it wins.
+
+3) REFINE: Convert the selected direction into a refined spec.
+   Include: success criteria, non-goals, verification checklist, first next action.
+   Then critique it and iterate once.
+```
+
+---
+
+## Thought partnership model: GTD + ESR
+
+ESR is the **reasoning engine**. GTD is the **control system** that makes reasoning repeatable across sessions.
+
+**Integrated loop:**
+1. **Capture** — dump inputs, unknowns, constraints (working set)
+2. **Explore** — generate options + surface assumptions *(ESR)*
+3. **Select** — decide with criteria + success measures *(ESR)*
+4. **Organize** — persist artifacts so next session is deterministic
+5. **Refine** — critique/verify against quality bar *(ESR)*
+6. **Engage** — execute the plan
+7. **Reflect** — short review: what changed, what to update, what to stop
+
+**Organize: what to persist**
+
+| Item | Purpose | Examples |
+|------|---------|----------|
+| Working set | Reduce context thrash | Notes, constraints list |
+| Decision criteria | Prevent re-litigation | Criteria + tradeoffs |
+| Spec/plan/guardrails | Deterministic next run | Spec + plan + rules |
+| Verification checklist | Quality gate | Evidence + tests |
+| Reflect notes | Improve process | Short retro bullets |
+
+---
+
+## Ownership mapping
+
+| Step | Human owns | GenAI owns | Joint output |
+|------|------------|------------|--------------|
+| Capture | Intent, stakes, constraints | Extraction, clustering | Working set |
+| Explore | What "distinct" means | Options, assumptions | Option set |
+| Select | Decision + risk acceptance | Tradeoff analysis | Chosen path + criteria |
+| Organize | What is authoritative | Structuring + formatting | Persisted artifacts |
+| Refine | Acceptance bar | Critique + tightening | Refined output + checks |
+| Engage | Final accountability | Execution assistance | Shipped work |
+| Reflect | Learning + priorities | Pattern spotting | Updated playbook |
+
+> **Rule:** If decision criteria are missing, Select must pause and ask for them.
+
+---
+
 ## Why it matters
 
 **If you skip this:**
@@ -38,59 +122,45 @@ This is how you treat genAI as a collaborator, not a vending machine.
 
 ### Phase 1: Explore (diverge)
 
-**Goal**: Generate meaningfully different options and surface what you don't know.
+**Goal:** Generate meaningfully different options and surface what you don't know.
 
-**What to ask for:**
-- Multiple approaches (3-5 minimum)
-- Clarifying questions about gaps
-- Hidden assumptions and risks
-- When each approach would fail
+**Inputs:** Topic/task, constraints, stakes level
 
-**Prompt template:**
+**Output:** 3-5 distinct directions with assumptions, risks, and trade-offs
+
+**Prompt:**
 ```text
-You are my thought partner.
-
-Task: [what I'm trying to accomplish]
-Context: [relevant background]
-Constraints: [time, tone, audience, format]
-
-Before solving, please:
-1. Ask 5-10 clarifying questions (grouped by: goal, constraints, domain).
-2. Propose 3-5 meaningfully different approaches.
-3. For each approach: strengths, weaknesses, and when it fails.
-4. Recommend which to try first and why.
+Generate 3-5 meaningfully different approaches to [task].
+For each: what it is, key assumptions, risks/unknowns, when it would fail.
+Ask 1-3 clarifying questions if constraints are missing.
 ```
 
 **Stop when:**
-- You have 3-5 meaningfully different approaches
-- The clarifying questions reveal real gaps you need to fill
-- You understand the trade-offs between options
+- You have 3-5 genuinely different approaches (not minor variants)
+- Trade-offs between options are clear
+- You understand what you'd give up with each choice
+
+**Failure modes:**
+- Options all sound the same → [Generic Outputs](../pitfalls/generic_outputs.md)
+- Output gets worse as you add context → [Context Bloat](../pitfalls/context_bloat.md)
+- Spinning without progress → [Getting Stuck](../pitfalls/getting_stuck.md)
 
 ### Phase 2: Select (converge)
 
-**Goal**: Choose one approach based on explicit criteria.
+**Goal:** Choose one approach based on explicit criteria.
 
-**What to ask for:**
-- A decision tied to your priorities
-- Success criteria (how you'll know it worked)
-- Next steps (concrete, actionable)
-- Risks and mitigations
+**Inputs:** Explored options, your decision criteria / priorities
 
-**Prompt template:**
+**Output:** Chosen direction + rationale + success criteria + what would change your mind
+
+**Prompt:**
 ```text
-Here are the approaches we explored: [paste or summarize]
-
-My priorities (ranked):
-1. [e.g., speed]
-2. [e.g., correctness]
-3. [e.g., low risk]
-
-Pick one approach. Return:
-- Decision: which approach
-- Rationale: why, tied to my priorities
-- Success criteria: how we'll know it worked
-- Next steps: concrete actions
-- Risks: what could go wrong and how to mitigate
+Compare these approaches against my priorities: [list priorities].
+Pick one. Explain:
+- Why it wins
+- What we give up
+- Success criteria
+- What would change your recommendation
 ```
 
 **Stop when:**
@@ -98,36 +168,41 @@ Pick one approach. Return:
 - You have measurable success criteria
 - You know the first concrete step
 
+**Failure modes:**
+- Can't decide (tie) → Clarify criteria or add constraints
+- Criteria missing → Pause and define them before proceeding
+- Over/under-verifying for stakes → [Trust Miscalibration](../pitfalls/trust_miscalibration.md)
+
 ### Phase 3: Refine (iterate)
 
-**Goal**: Improve output until it meets quality bar.
+**Goal:** Improve output until it meets quality bar.
 
-**What to ask for:**
-- Critique against specific criteria
-- Rewrite to higher standard
-- Final checklist before shipping
+**Inputs:** Selected direction, acceptance criteria, draft output
 
-**Prompt template:**
+**Output:** Refined spec/output + verification checklist + first next action
+
+**Prompt:**
 ```text
-Here is the current draft: [paste]
-
-Please:
-1. Critique it against: clarity, correctness, completeness, usefulness.
-2. Identify the weakest part.
-3. Rewrite to a higher standard.
-4. Add a checklist I can use before shipping.
+Critique this against: clarity, correctness, completeness, usefulness.
+What's the weakest part? Rewrite to a higher standard.
+Add a verification checklist and first next action.
 ```
 
 **The micro-loop** (repeat as needed):
 1. **Draft** — generate
 2. **Critique** — stress-test
 3. **Edit** — improve
-4. **Verify** — check claims
+4. **Verify** — check claims (if factual claims are involved, apply evidence standards)
 
 **Stop when:**
 - Output meets your quality bar
-- Checklist passes
+- Verification checklist passes
 - Further iteration yields diminishing returns
+
+**Failure modes:**
+- Refine phase takes forever → Explore/Select missed something; go back
+- Confident but wrong claims → [Hallucinations](../pitfalls/hallucinations.md)
+- Over/under-verifying for stakes → [Trust Miscalibration](../pitfalls/trust_miscalibration.md)
 
 ## Signs you're doing it well
 
@@ -143,33 +218,24 @@ Please:
 - Refine phase takes forever → Your explore/select phases missed something
 - You keep starting over → See [Getting Stuck](../pitfalls/getting_stuck.md)
 
-## Quick reference
+## Handoff: When ESR is done
 
-### Explore prompt
-```text
-Give me 5 meaningfully different approaches to [task].
-For each: describe the approach, strengths, weaknesses, and when it would fail.
-```
+**Move to Engage when you have:**
+- A refined spec/output
+- Success criteria + non-goals
+- A verification checklist
+- A first next action
 
-### Select prompt
-```text
-Compare these approaches against my priorities: [list priorities].
-Pick one. Explain why. Give me success criteria and next steps.
-```
+**After execution, Reflect (2-5 min):**
+- What changed from the plan?
+- What should be updated (criteria, guardrails, templates)?
+- What should stop happening?
 
-### Refine prompt
-```text
-Critique this against [criteria]. What's the weakest part?
-Rewrite to a higher standard. Add a pre-ship checklist.
-```
+---
 
-### Stop conditions summary
+## Full prompt library
 
-| Phase | Continue if... | Stop when... |
-|-------|----------------|--------------|
-| Explore | Options too similar, gaps unclear | 3-5 different approaches, trade-offs clear |
-| Select | Criteria not met, tie between options | One approach wins, next steps clear |
-| Refine | Below quality bar, weak spots remain | Quality bar met, checklist passes |
+For copy-paste prompts, see [Reference](../reference/index.md).
 
 ---
 
@@ -189,3 +255,10 @@ Concepts in this guide are grounded in research and best practices:
 - [Trust Calibration](trust_calibration.md) — verification in the refine phase
 - [Getting Stuck](../pitfalls/getting_stuck.md) — when the loop breaks down
 - [Explore Prompts](../reference/prompts/explore.md) — copy-paste prompts for explore phase
+
+---
+
+**Page contract:**
+- This page explains ESR and provides minimal runnable prompts
+- Full prompt library → [Reference](../reference/index.md)
+- Recovery tactics → [Pitfalls](../pitfalls/index.md)
