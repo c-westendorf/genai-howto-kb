@@ -211,3 +211,4 @@ site/
 scratch/
 temp/
 tmp/
+.DS_Store

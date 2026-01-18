@@ -4,6 +4,8 @@ updated: 2026-01-17
 ---
 
 > **Navigation**: [START HERE](../START_HERE.md) · [Concepts](../concepts/index.md) · [Pitfalls](../pitfalls/index.md) · [Decisions](index.md) · [Playbooks](../playbooks/index.md) · [Reference](../reference/index.md)
+>
+> **In this section**: [Which Pattern](which_pattern.md) · [How Much Verification](how_much_verification.md) · [When to Stop](when_to_stop.md) · [Output Quality](output_quality.md) · [Start Over](start_over.md) · [Multi-LLM](multi_llm.md)
 
 # Multi-LLM Tactics
 

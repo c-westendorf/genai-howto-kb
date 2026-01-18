@@ -4,6 +4,10 @@ updated: 2026-01-17
 refs: [S0001, S0003]
 ---
 
+> **Navigation**: [START HERE](../START_HERE.md) · [Concepts](../concepts/index.md) · [Pitfalls](index.md) · [Decisions](../decisions/index.md) · [Playbooks](../playbooks/index.md) · [Reference](../reference/index.md)
+>
+> **In this section**: [Context Bloat](context_bloat.md) · [Trust Miscalibration](trust_miscalibration.md) · [Prompt Drift](prompt_drift.md) · [Generic Outputs](generic_outputs.md) · [Hallucinations](hallucinations.md) · [Getting Stuck](getting_stuck.md)
+
 # Hallucination Traps
 
 ## What it looks like
