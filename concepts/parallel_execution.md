@@ -196,6 +196,12 @@ Concepts in this guide are grounded in research and best practices:
 
 ---
 
+## Implementation in AI coding environments
+
+For practical implementation of these patterns in tools like Claude Code, Cursor, or Windsurf, see [AI Coding Environment Patterns](../playbooks/ide_environment.md) — covers conversation forking, git worktrees, session persistence, and subagent delegation.
+
+---
+
 ## Related
 
 - [Explore → Select → Refine](explore_select_refine.md) — the loop within each thread

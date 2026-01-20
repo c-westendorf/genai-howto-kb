@@ -96,6 +96,7 @@ This isn't a curriculum — it's a map. Use it to orient yourself and find what 
 **What to learn next:**
 - Advanced [pitfalls](pitfalls/index.md) and edge cases
 - Domain-specific playbooks
+- [AI coding environment patterns](playbooks/ide_environment.md) — operationalize concepts in your tools
 - Building institutional playbooks for your team
 
 **Key unlock:**

@@ -102,8 +102,24 @@ BACKGROUND (use only if needed):
 
 ---
 
+## Tool-specific tactics
+
+In AI coding assistants with extensible tools (MCPs, plugins, extensions):
+
+- **Disable unused tools per project** — each tool definition consumes context window before you've typed anything
+- **Rule of thumb**: Keep under 80 active tools
+- **Configure at project level** — not every project needs every integration
+- **Batch by workflow** — enable database tools for backend work, disable for frontend
+
+A 200k context window might effectively be 70k with too many tools enabled.
+
+See [AI Coding Environment Patterns](../playbooks/ide_environment.md) for full patterns.
+
+---
+
 ## Related
 
 - [Context Engineering](../concepts/context_engineering.md) — how to structure context well
 - [Getting Stuck](getting_stuck.md) — when iteration isn't helping
 - [Context pack template](../reference/templates/context_pack.md) — structured template
+- [AI Coding Environment Patterns](../playbooks/ide_environment.md) — tool configuration patterns

@@ -46,6 +46,9 @@ Complete workflow for AI-assisted development: GSD for genAI-friendly task specs
 ### [Business-Specific Patterns](business_patterns.md)
 Stakeholder comms, executive summaries, decision memos, competitive analysis. Patterns for business work.
 
+### [AI Coding Environment Patterns](ide_environment.md)
+Configuring AI coding assistants (Claude Code, Cursor, etc.) for effective work: context window hygiene, reusable skills, automated hooks, parallel execution implementation, and subagent delegation. Level 4 content for power users.
+
 ---
 
 ## How to use playbooks

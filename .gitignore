@@ -4,8 +4,15 @@
 .DS_Store
 .DS_Store?
 ._*
+.AppleDouble
+.LSOverride
 .Spotlight-V100
 .Trashes
+.DocumentRevisions-V100
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
 ehthumbs.db
 Thumbs.db
 Desktop.ini
@@ -124,6 +131,7 @@ tensorboard_logs/
 # ====================
 .idea/
 .vscode/
+.cursor/
 *.swp
 *.swo
 *~
@@ -211,4 +219,9 @@ site/
 scratch/
 temp/
 tmp/
-.DS_Store
+
+# ====================
+# Claude Code
+# ====================
+.claude/
+.claude.json
